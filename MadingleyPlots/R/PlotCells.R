@@ -1,4 +1,4 @@
-PlotCells<-function(resultsDir,outDir,map="World"){
+PlotCells<-function(resultsDir,outDir=NULL,map="World"){
   
   if (map == "Africa"){
     data(Africa)
@@ -8,8 +8,11 @@ PlotCells<-function(resultsDir,outDir,map="World"){
   
   locations<-read.csv(paste(resultsDir,"/SpecificLocations.csv",sep=""))
   
-  pdf(paste(outDir,"CellsMap.pdf",sep=""),
-      width = 12.5/2.54,height=6.25/2.54)
+  if (!is.null(outDir)){
+    pdf(paste(outDir,"CellsMap.pdf",sep=""),
+        width = 12.5/2.54,height=6.25/2.54)
+  }
+    
   
   par(mar=c(0,0,0,0))
   
@@ -19,6 +22,6 @@ PlotCells<-function(resultsDir,outDir,map="World"){
   
   text(locations$Longitude,locations$Latitude,1:dim(locations)[1],pos=2)
   
-  dev.off()
+  if (!is.null(outDir)) invisible(dev.off())
   
 }
