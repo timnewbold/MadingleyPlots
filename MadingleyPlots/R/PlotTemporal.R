@@ -1,5 +1,5 @@
 
-PlotTemporal<-function(resultsDir,plotName,outDir,
+PlotTemporal<-function(resultsDir,plotName,outDir=NULL,
                        label=NULL,
                        vars=c("autotroph biomass density",
                               "herbivore biomass density",
@@ -115,9 +115,11 @@ PlotTemporal<-function(resultsDir,plotName,outDir,
   
   .Log("Initializing plot\n")
   dims<-.plotDims(length(cells))
-  pdf(paste(outDir,plotName,".pdf",sep=""),
-      width = dims$width,height = dims$height)
-  
+  if(!is.null(outDir)){
+    pdf(paste(outDir,plotName,".pdf",sep=""),
+        width = dims$width,height = dims$height)
+  }
+    
   par(mfrow=.gridArrange(length(cells)))
   par(mar=c(3,3.5,0.5,0.5))
   par(tck=-0.01)
@@ -222,7 +224,7 @@ PlotTemporal<-function(resultsDir,plotName,outDir,
     
   })
   
-  invisible(dev.off())
+  if (!is.null(outDir)) invisible(dev.off())
   
   if (returnResults){
     return(ret)
