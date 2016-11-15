@@ -1,0 +1,1 @@
+outline<-readOGR(".","World",verbose = FALSE)
