@@ -1,5 +1,5 @@
 
-PlotPyramids <- function(resultsDir,plotName,outDir,
+PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
                          label=NULL,
                         whichCells=NULL,endTimeStep=NULL,
                         numTimeSteps=12,vars=c("autotroph biomass density",
@@ -67,8 +67,11 @@ PlotPyramids <- function(resultsDir,plotName,outDir,
   
   .Log("Initializing plot\n")
   dims<-.plotDims(length(cells))
-  pdf(paste(outDir,plotName,".pdf",sep=""),
-      width = dims$width,height = dims$height)
+  
+  if(!is.null(outDir)){
+    pdf(paste(outDir,plotName,".pdf",sep=""),
+        width = dims$width,height = dims$height)
+  }
   
   par(mfrow=.gridArrange(length(cells)))
   
@@ -233,7 +236,5 @@ PlotPyramids <- function(resultsDir,plotName,outDir,
 #     
   })
   
-  dev.off()
-  
-  
+  if(!is.null(outDir)) invisible(dev.off())
 }
