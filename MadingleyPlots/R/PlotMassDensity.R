@@ -1,6 +1,6 @@
 
 PlotMassDensity <- function(resultsDir,plotName = "MassDensity",
-                            outDir,
+                            outDir=NULL,
                             label=NULL,
                             whichCells=NULL,endTimeStep=NULL,
                             numTimeSteps=12,
@@ -76,8 +76,10 @@ PlotMassDensity <- function(resultsDir,plotName = "MassDensity",
   }
   
   .Log("Initializing plot\n")
-  pdf(paste(outDir,plotName,".pdf",sep=""),
-      width = 17.5/2.54,height = (5/2.54)*length(cells))
+  if(!is.null(outDir)){
+    pdf(paste(outDir,plotName,".pdf",sep=""),
+        width = 17.5/2.54,height = (5/2.54)*length(cells))
+  }
   
   par(mfrow=c(length(cells),3))
   par(las=1)
@@ -138,7 +140,7 @@ PlotMassDensity <- function(resultsDir,plotName = "MassDensity",
     
   })
   
-  invisible(dev.off())
+  if(!is.null(outDir)) invisible(dev.off())
   
   if (returnResults){
     return(ret)
