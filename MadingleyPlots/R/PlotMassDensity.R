@@ -41,6 +41,7 @@ PlotMassDensity <- function(resultsDir,plotName = "MassDensity",
   
   if(is.null(label)){
     label<-unique(substr(files,1,sims.re-1))
+    print(label)
     stopifnot(length(label)==1)
     label<-label[1]
   } else {
