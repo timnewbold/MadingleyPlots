@@ -121,7 +121,7 @@ PlotTemporal<-function(resultsDir,plotName,outDir=NULL,
   }
     
   par(mfrow=.gridArrange(length(cells)))
-  par(mar=c(3,3.5,0.5,4.5))
+  par(mar=c(3,3.5,0.5,8.5))
   par(tck=-0.01)
   par(las=1)
   
@@ -221,12 +221,11 @@ PlotTemporal<-function(resultsDir,plotName,outDir=NULL,
       ret[[cell]] <<- summaryValues
     }
     
+    legend(x = range(years)[2]+diff(range(years))*0.1,
+           y = 10^(log10(minVal)+0.7*(log10(maxVal)-log10(minVal))),
+           legend = vars,lty=1,col = cols)
     
   })
-  
-  legend(x = range(years)[2]+diff(range(years))*0.1,
-         y = 10^(log10(minVal)+0.7*(log10(maxVal)-log10(minVal))),
-         legend = vars,lty=1,col = cols)
   
   if (!is.null(outDir)) invisible(dev.off())
   
