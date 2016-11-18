@@ -223,7 +223,7 @@ PlotTemporal<-function(resultsDir,plotName,outDir=NULL,
     
     legend(x = range(years)[2]+diff(range(years))*0.1,
            y = 10^(log10(minVal)+0.7*(log10(maxVal)-log10(minVal))),
-           legend = vars,lty=1,col = cols)
+           legend = vars,lty=1,col = cols,xpd=TRUE)
     
   })
   
