@@ -196,8 +196,9 @@ PlotTemporal<-function(resultsDir,plotName,outDir=NULL,
     })))
     
     par(mgp=c(1.6,0.3,0))
-    plot(999999999999999,999999999999999,xlim=range(years),ylim=c(minVal,maxVal),log="y",
-         xlab=xlab,yaxt="n",ylab=NA)
+    plot(999999999999999,999999999999999,xlim=range(years),
+         ylim=c(minVal,maxVal),log="y",
+         xlab=xlab,yaxt="n",ylab=NA,bty="l")
     par(mgp=c(2.6,0.3,0))
     axis(2)
     title(ylab=ylab)
@@ -221,9 +222,9 @@ PlotTemporal<-function(resultsDir,plotName,outDir=NULL,
       ret[[cell]] <<- summaryValues
     }
     
-    legend(x = range(years)[2]+diff(range(years))*0.1,
+    legend(x = range(years)[2]+diff(range(years))*0.07,
            y = 10^(log10(minVal)+0.7*(log10(maxVal)-log10(minVal))),
-           legend = vars,lty=1,col = cols,xpd=TRUE)
+           legend = vars,lty=1,col = cols,xpd=TRUE,bty = "n")
     
   })
   
