@@ -125,7 +125,7 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
       return(log10(x)/log10(maxBiomass))
     })
     
-    par(mar=c(1,1,1,1))
+    par(mar=c(1,1,1,8.5))
     plot.new()
     
     mapply(FUN = function(width,y,col,biomass){
@@ -173,7 +173,9 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
       
     }
     
-    
+    legend(x = 1.1,y = 0.5,
+           legend = gsub(" biomass density","",vars),
+           fill = cols,xpd=TRUE,bty = "n")
     
 #     
 #     yearAvgs<-lapply(allResults,FUN = function(resultsMatrix){
