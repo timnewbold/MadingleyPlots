@@ -44,19 +44,26 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
     files<-.ListCellOuputFiles(resultsDir)
   }
   
-  if(!is.null(whichCells)){
-    files <- files[sapply(paste("Cell",whichCells-1,sep=""),FUN = function(x) return(grep(x,files)))]
+  if (!gridSimulation){
+    if(!is.null(whichCells)){
+      files <- files[sapply(paste("Cell",whichCells-1,sep=""),FUN = function(x) return(grep(x,files)))]
+    }
+    
+    # Find the unique cells in these simulations
+    cells.re<-regexpr("Cell[0-9]+",files)
+    cells<-as.list(unique(substr(files,cells.re,cells.re+
+                                   attr(cells.re,"match.length")-1)))
+    
   }
-  
-  # Find the unique cells in these simulations
-  cells.re<-regexpr("Cell[0-9]+",files)
-  cells<-as.list(unique(substr(files,cells.re,cells.re+
-                                 attr(cells.re,"match.length")-1)))
   
   # Find the simulation numbers
   sims.re<-regexpr("_[0-9]+_",files)
   sims<-as.list(unique(substr(files,sims.re,sims.re+
                                 attr(sims.re,"match.length")-1)))
+  
+  print(sims.re)
+  
+  stop()
   
   if(is.null(label)){
     label<-unique(substr(files,1,sims.re-1))
