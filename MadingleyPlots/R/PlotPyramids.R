@@ -54,10 +54,18 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
     
   }
   
-  # Find the simulation numbers
-  sims.re<-regexpr("_[0-9]+_",files)
-  sims<-as.list(unique(substr(files,sims.re,sims.re+
-                                attr(sims.re,"match.length")-1)))
+  if (gridSimulation) {
+    # Find the simulation numbers
+    sims.re<-regexpr("_[0-9]+",files)
+    sims<-as.list(unique(substr(files,sims.re,sims.re+
+                                  attr(sims.re,"match.length")-1)))
+    
+  } else {
+    # Find the simulation numbers
+    sims.re<-regexpr("_[0-9]+_",files)
+    sims<-as.list(unique(substr(files,sims.re,sims.re+
+                                  attr(sims.re,"match.length")-1)))
+  }
   
   print(sims.re)
   
