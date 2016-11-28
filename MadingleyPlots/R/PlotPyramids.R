@@ -31,6 +31,13 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
   
   stopifnot(all(vars %in% names(PlantBiomassVariables)))
   
+  if (gridSimulation){
+    vars <- gsub(" biomass density","biomass density",vars)
+    PlantBiomassVariables <- lapply(
+      PlantBiomassVariables,function(x) return(
+        gsub(" biomass density","biomass density",x)))
+  }
+  
   if ("SimulationControlParameters.csv" %in% dir(resultsDir)){
     initialization <- read.csv(paste(resultsDir,"/SimulationControlParameters.csv",sep=""))
   } else {
