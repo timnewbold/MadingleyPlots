@@ -123,8 +123,12 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
     # Loop over simulations in the ensemble
     s<-1
     for (sim in sims){
-      sds.path<-paste("msds:nc?file=",resultsDir,"/",label,sim,cell,
-                      ".nc",sep="")
+      if (gridSimulation){
+        sds.path<-paste("msds:nc?file=",resultsDir,"/",label,sim,sep="")
+      } else {
+        sds.path<-paste("msds:nc?file=",resultsDir,"/",label,sim,cell,
+                        ".nc",sep="")
+      }
       
       data<-open.sds(sds.path)
       
