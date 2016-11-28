@@ -37,6 +37,8 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
   .Log("Finding Madingley output files\n")
   files<-.ListCellOuputFiles(resultsDir)
   
+  print(files)
+  
   if(!is.null(whichCells)){
     files <- files[sapply(paste("Cell",whichCells-1,sep=""),FUN = function(x) return(grep(x,files)))]
   }
@@ -51,8 +53,11 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
   sims<-as.list(unique(substr(files,sims.re,sims.re+
                                 attr(sims.re,"match.length")-1)))
   
+  print(sims.re)
+  
   if(is.null(label)){
     label<-unique(substr(files,1,sims.re-1))
+    print(label)
     stopifnot(length(label)==1)
     label<-label[1]
   } else {
