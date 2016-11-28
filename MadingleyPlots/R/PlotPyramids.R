@@ -149,6 +149,7 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
       
       # Populate the results matrices
       for (var in vars){
+        print(var)
         test <- get.sds(data,var)
         print("Input data dimensions:")
         print(dim(test))
