@@ -69,7 +69,11 @@ DegreeCellAreaKM <- function(lat, height, width) {
     values <- extract(raster(lp.ratio),locations[,c(2,1)])
     
   } else {
-    initialization <- read.csv(paste(resultsDir,"/SimulationControlParameters.csv",sep=""))
+    if ("SimulationControlParameters.csv" %in% dir(resultsDir)){
+      initialization <- read.csv(paste(resultsDir,"/SimulationControlParameters.csv",sep=""))
+    } else {
+      initialization <- read.csv(paste(resultsDir,"/EcosystemModelInitialisation.csv",sep=""))
+    }
     ll <- as.numeric(paste(initialization$Value[(initialization$Parameter=="Leftmost Longitude")]))
     rl <- as.numeric(paste(initialization$Value[(initialization$Parameter=="Rightmost Longitude")]))
     bl <- as.numeric(paste(initialization$Value[(initialization$Parameter=="Bottom Latitude")]))

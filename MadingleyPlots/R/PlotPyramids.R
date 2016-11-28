@@ -159,9 +159,6 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
     }
     
     for (var in vars){
-      print(names(PlantBiomassVariables))
-      print(var)
-      print(PlantBiomassVariables[var])
       if (PlantBiomassVariables[var][[1]]){
         lp.ratio <- .GetLPRatios(resultsDir)[as.integer(gsub("Cell","",cell))+1]
         allResults[[var]] <- allResults[[var]]/lp.ratio
