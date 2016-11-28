@@ -115,6 +115,8 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
     par(mfrow=.gridArrange(length(cells)))
   }
   
+  if (gridSimulation) cells <- as.list(1:length(whichCells))
+  
   .Log("Plotting\n")
   lapply(cells,FUN=function(cell){
     
