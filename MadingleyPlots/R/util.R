@@ -80,6 +80,12 @@ DegreeCellAreaKM <- function(lat, height, width) {
     tl <- as.numeric(paste(initialization$Value[(initialization$Parameter=="Top Latitude")]))
     cs <- as.numeric(paste(initialization$Value[(initialization$Parameter=="Grid Cell Size")]))
     
+    print(ll)
+    print(rl)
+    print(bl)
+    print(tl)
+    print(cs)
+    
     tempRaster <- raster(xmn=ll,xmx=rl,ymn=bl,ymx=tl,nrows=(tl-bl)/cs,ncols=(rl-ll)/cs)
     tempRaster <- resample(raster(lp.ratio),tempRaster,method="bilinear")
     values <- matrix(tempRaster@data@values,nrow = (rl-ll)/cs,ncol = (tl-bl)/cs)
