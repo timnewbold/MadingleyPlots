@@ -38,8 +38,6 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
   .Log("Finding Madingley output files\n")
   if (gridSimulation){
     files<-.ListGridOutputFiles(resultsDir)
-    print(files)
-    stop()
   } else {
     files<-.ListCellOuputFiles(resultsDir)
   }
