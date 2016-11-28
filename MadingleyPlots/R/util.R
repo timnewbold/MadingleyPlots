@@ -69,13 +69,20 @@ DegreeCellAreaKM <- function(lat, height, width) {
     values <- extract(raster(lp.ratio),locations[,c(2,1)])
     
   } else {
+    oldStyleInputs <- FALSE
     if ("SimulationControlParameters.csv" %in% dir(resultsDir)){
       initialization <- read.csv(paste(resultsDir,"/SimulationControlParameters.csv",sep=""))
     } else {
       initialization <- read.csv(paste(resultsDir,"/EcosystemModelInitialisation.csv",sep=""))
+      oldStyleInputs <- TRUE
     }
-    ll <- as.numeric(paste(initialization$Value[(initialization$Parameter=="Leftmost Longitude")]))
-    rl <- as.numeric(paste(initialization$Value[(initialization$Parameter=="Rightmost Longitude")]))
+    if (oldStyleInputs){
+      ll <- as.numeric(paste(initialization$Value[(initialization$Parameter=="Leftmost Latitude")]))
+      rl <- as.numeric(paste(initialization$Value[(initialization$Parameter=="Rightmost Latitude")]))
+    } else {
+      ll <- as.numeric(paste(initialization$Value[(initialization$Parameter=="Leftmost Longitude")]))
+      rl <- as.numeric(paste(initialization$Value[(initialization$Parameter=="Rightmost Longitude")]))
+    }
     bl <- as.numeric(paste(initialization$Value[(initialization$Parameter=="Bottom Latitude")]))
     tl <- as.numeric(paste(initialization$Value[(initialization$Parameter=="Top Latitude")]))
     cs <- as.numeric(paste(initialization$Value[(initialization$Parameter=="Grid Cell Size")]))
