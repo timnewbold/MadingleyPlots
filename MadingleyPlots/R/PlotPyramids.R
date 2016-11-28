@@ -147,6 +147,8 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
       
       data<-open.sds(sds.path)
       
+      print(sds.path)
+      
       # Populate the results matrices
       for (var in vars){
         print(var)
