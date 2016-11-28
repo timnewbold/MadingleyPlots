@@ -135,6 +135,8 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
     }
     names(allResults)<-vars
     
+    print(dim(allResults[[1]]))
+    
     # Loop over simulations in the ensemble
     s<-1
     for (sim in sims){
