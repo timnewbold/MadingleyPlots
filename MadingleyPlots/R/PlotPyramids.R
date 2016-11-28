@@ -1,6 +1,7 @@
 
 PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
                          label=NULL,
+                         gridSimulation=FALSE,
                         whichCells=NULL,endTimeStep=NULL,
                         numTimeSteps=12,vars=c("autotroph biomass density",
                                                "herbivore biomass density",
@@ -35,9 +36,13 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
   cellsize <- as.numeric(paste(initialization$Value[which(initialization$Parameter=="Grid Cell Size")]))
   
   .Log("Finding Madingley output files\n")
-  files<-.ListCellOuputFiles(resultsDir)
-  
-  print(files)
+  if (gridSimulation){
+    files<-.ListGridOutputFiles(resultsDir)
+    print(files)
+    stop()
+  } else {
+    files<-.ListCellOuputFiles(resultsDir)
+  }
   
   if(!is.null(whichCells)){
     files <- files[sapply(paste("Cell",whichCells-1,sep=""),FUN = function(x) return(grep(x,files)))]
@@ -52,8 +57,6 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
   sims.re<-regexpr("_[0-9]+_",files)
   sims<-as.list(unique(substr(files,sims.re,sims.re+
                                 attr(sims.re,"match.length")-1)))
-  
-  print(sims.re)
   
   if(is.null(label)){
     label<-unique(substr(files,1,sims.re-1))
