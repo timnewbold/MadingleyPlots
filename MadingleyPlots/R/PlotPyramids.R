@@ -139,7 +139,7 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
     s<-1
     for (sim in sims){
       if (gridSimulation){
-        sds.path<-paste("msds:nc?file=",resultsDir,"/",label,sim,sep="")
+        sds.path<-paste("msds:nc?file=",resultsDir,"/",label,sim,".nc",sep="")
       } else {
         sds.path<-paste("msds:nc?file=",resultsDir,"/",label,sim,cell,
                         ".nc",sep="")
@@ -147,11 +147,8 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
       
       data<-open.sds(sds.path)
       
-      print(sds.path)
-      
       # Populate the results matrices
       for (var in vars){
-        print(var)
         test <- get.sds(data,var)
         print("Input data dimensions:")
         print(dim(test))
