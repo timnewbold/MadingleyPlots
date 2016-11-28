@@ -33,8 +33,8 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
   
   if (gridSimulation){
     vars <- gsub(" biomass density","biomass density",vars)
-    PlantBiomassVariables <- lapply(
-      PlantBiomassVariables,function(x) return(
+    names(PlantBiomassVariables) <- lapply(
+      names(PlantBiomassVariables),function(x) return(
         gsub(" biomass density","biomass density",x)))
   }
   
