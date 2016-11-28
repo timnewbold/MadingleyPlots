@@ -26,7 +26,12 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
   
   stopifnot(all(vars %in% names(PlantBiomassVariables)))
   
-  initialization <- read.csv(paste(resultsDir,"/SimulationControlParameters.csv",sep=""))
+  if ("SimulationControlParameters.csv" %in% dir(resultsDir)){
+    initialization <- read.csv(paste(resultsDir,"/SimulationControlParameters.csv",sep=""))
+  } else {
+    initialization <- read.csv(paste(resultsDir,"/EcosystemModelInitialisation.csv",sep=""))
+  }
+
   cellsize <- as.numeric(paste(initialization$Value[which(initialization$Parameter=="Grid Cell Size")]))
   
   .Log("Finding Madingley output files\n")
