@@ -15,6 +15,10 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
   
   stopifnot(length(vars)==length(cols))
   
+  if ((gridSimulation) & (is.null(whichCells))){
+    stop("Error, if a grid-based simulation, you must specify cells")
+  }
+  
   PlantBiomassVariables<-list(
     "autotroph biomass density" = TRUE,
     "carnivore density" = FALSE,
@@ -67,10 +71,6 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
                                   attr(sims.re,"match.length")-1)))
   }
   
-  print(sims.re)
-  
-  stop()
-  
   if(is.null(label)){
     label<-unique(substr(files,1,sims.re-1))
     print(label)
@@ -80,7 +80,7 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
     label <- paste("BasicOutputs_",label,sep="")
   }
   
-  .Log(paste("Found results for ",length(cells)," cells\n",sep=""))
+  if (!gridSimulation) .Log(paste("Found results for ",length(cells)," cells\n",sep=""))
   .Log(paste("Found results for ",length(sims)," simulations\n",sep=""))
   
   .Log("Getting basic information about simulations\n")
@@ -92,14 +92,22 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
   times <- (endTimeStep-numTimeSteps+1):endTimeStep
   
   .Log("Initializing plot\n")
-  dims<-.plotDims(length(cells))
+  if (gridSimulation){
+    dims <- .plotDims(length(whichCells))
+  } else {
+    dims<-.plotDims(length(cells))
+  }
   
   if(!is.null(outDir)){
     pdf(paste(outDir,plotName,".pdf",sep=""),
         width = dims$width,height = dims$height)
   }
   
-  par(mfrow=.gridArrange(length(cells)))
+  if (gridSimulation){
+    par(mfrow=.gridArrange(length(whichCells)))
+  } else {
+    par(mfrow=.gridArrange(length(cells)))
+  }
   
   .Log("Plotting\n")
   lapply(cells,FUN=function(cell){
@@ -122,6 +130,12 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
       
       # Populate the results matrices
       for (var in vars){
+        test <- get.sds(data,var)
+        print("Input data dimensions:")
+        print(dim(test))
+        print("Destination dimensions:")
+        print(dim(allResults[var][[1]][s,]))
+        stop()
         allResults[var][[1]][s,]<-get.sds(data,var)
       }
       s<-s+1
