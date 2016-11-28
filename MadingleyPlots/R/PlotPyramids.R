@@ -148,13 +148,11 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
       
       # Populate the results matrices
       for (var in vars){
-        print(var)
-        print(names(allResults))
         test <- get.sds(data,var)
         print("Input data dimensions:")
         print(dim(test))
         print("Destination dimensions:")
-        print(dim(allResults[var][[1]][s,]))
+        print(length(allResults[var][[1]][s,]))
         stop()
         allResults[var][[1]][s,]<-get.sds(data,var)
       }
