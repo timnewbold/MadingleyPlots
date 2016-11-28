@@ -80,7 +80,6 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
   
   if(is.null(label)){
     label<-unique(substr(files,1,sims.re-1))
-    print(label)
     stopifnot(length(label)==1)
     label<-label[1]
   } else {
@@ -135,8 +134,6 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
     }
     names(allResults)<-vars
     
-    print(dim(allResults[[1]]))
-    
     # Loop over simulations in the ensemble
     s<-1
     for (sim in sims){
@@ -151,6 +148,8 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
       
       # Populate the results matrices
       for (var in vars){
+        print(var)
+        print(names(allResults))
         test <- get.sds(data,var)
         print("Input data dimensions:")
         print(dim(test))
