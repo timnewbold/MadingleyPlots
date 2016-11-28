@@ -84,8 +84,14 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
   .Log(paste("Found results for ",length(sims)," simulations\n",sep=""))
   
   .Log("Getting basic information about simulations\n")
-  sds.path<-paste("msds:nc?file=",resultsDir,"/",label,sims[1],cells[1],
-                  ".nc",sep="")
+  if (gridSimulation){
+    sds.path<-paste("msds:nc?file=",resultsDir,"/",label,sims[1],
+                    ".nc",sep="")
+  } else {
+    sds.path<-paste("msds:nc?file=",resultsDir,"/",label,sims[1],cells[1],
+                    ".nc",sep="")
+  }
+  
   data<-open.sds(sds.path)
   allTimes<-get.sds(data,"Time step")
   if (is.null(endTimeStep)) endTimeStep <- tail(allTimes,1)
