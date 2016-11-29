@@ -15,6 +15,16 @@ PlotTemporal<-function(resultsDir,plotName,outDir=NULL,
                        returnResults = FALSE,
                        whichCells = NULL){
   
+  stopifnot(length(vars)==length(cols))
+  
+  if ((gridSimulation) & (is.null(whichCells))){
+    stop("Error, if a grid-based simulation, you must specify cells")
+  }
+  
+  if (gridSimulation){
+    vars <- gsub(" biomass density","biomass density",vars)
+  }
+  
   PlantBiomassVariables<-list(
     "autotroph biomass density" = TRUE,
     "carnivore density" = FALSE,
@@ -74,24 +84,83 @@ PlotTemporal<-function(resultsDir,plotName,outDir=NULL,
     
   )
   
-  stopifnot(all(vars %in% names(PlantBiomassVariables)))
-  
-  .Log("Finding Madingley output files\n")
-  files<-.ListCellOuputFiles(resultsDir)
-  
-  # Find the unique cells in these simulations
-  cells.re<-regexpr("Cell[0-9]+",files)
-  cells<-as.list(unique(substr(files,cells.re,cells.re+
-                         attr(cells.re,"match.length")-1)))
-  
-  if (!is.null(whichCells)){
-    cells <- cells[whichCells]
+  if (gridSimulation){
+    names(PlantBiomassVariables) <- lapply(
+      names(PlantBiomassVariables),function(x) return(
+        gsub(" biomass density","biomass density",x)))
   }
   
-  # Find the simulation numbers
-  sims.re<-regexpr("_[0-9]+_",files)
-  sims<-as.list(unique(substr(files,sims.re,sims.re+
-                        attr(sims.re,"match.length")-1)))
+  if (gridSimulation){
+    
+    LogVariables<-list(
+      "Abundance density" = TRUE,
+      "Biomass density" = TRUE,
+      "autotrophbiomass density" = TRUE,
+      "carnivoreabundance density" = TRUE,
+      "carnivorebiomass density" = TRUE,
+      "herbivoreabundance density" = TRUE,
+      "herbivorebiomass density" = TRUE,
+      "omnivoreabundance density" = TRUE,
+      "omnivorebiomass density" = TRUE
+      
+    )
+    
+    GramsBiomassVariables<-list(
+      "Abundance density" = FALSE,
+      "Biomass density" = TRUE,
+      "autotrophbiomass density" = TRUE,
+      "carnivoreabundance density" = FALSE,
+      "carnivorebiomass density" = TRUE,
+      "herbivoreabundance density" = FALSE,
+      "herbivorebiomass density" = TRUE,
+      "omnivoreabundance density" = FALSE,
+      "omnivorebiomass density" = TRUE
+      
+    )
+    
+    stopifnot(all(vars %in% names(LogVariables)))
+    stopifnot(all(vars %in% names(GramsBiomassVariables)))
+  }
+  
+  stopifnot(all(vars %in% names(PlantBiomassVariables)))
+  
+  if ("SimulationControlParameters.csv" %in% dir(resultsDir)){
+    initialization <- read.csv(paste(resultsDir,"/SimulationControlParameters.csv",sep=""))
+  } else {
+    initialization <- read.csv(paste(resultsDir,"/EcosystemModelInitialisation.csv",sep=""))
+  }
+  
+  .Log("Finding Madingley output files\n")
+  if (gridSimulation){
+    files<-.ListGridOutputFiles(resultsDir)
+  } else {
+    files<-.ListCellOuputFiles(resultsDir)
+  }
+  
+  if (!gridSimulation){
+    if(!is.null(whichCells)){
+      files <- files[sapply(paste("Cell",whichCells-1,sep=""),FUN = function(x) return(grep(x,files)))]
+    }
+    
+    # Find the unique cells in these simulations
+    cells.re<-regexpr("Cell[0-9]+",files)
+    cells<-as.list(unique(substr(files,cells.re,cells.re+
+                                   attr(cells.re,"match.length")-1)))
+    
+  }
+  
+  if (gridSimulation) {
+    # Find the simulation numbers
+    sims.re<-regexpr("_[0-9]+",files)
+    sims<-as.list(unique(substr(files,sims.re,sims.re+
+                                  attr(sims.re,"match.length")-1)))
+    
+  } else {
+    # Find the simulation numbers
+    sims.re<-regexpr("_[0-9]+_",files)
+    sims<-as.list(unique(substr(files,sims.re,sims.re+
+                                  attr(sims.re,"match.length")-1)))
+  }
   
   if(is.null(label)){
     label<-unique(substr(files,1,sims.re-1))
@@ -101,12 +170,17 @@ PlotTemporal<-function(resultsDir,plotName,outDir=NULL,
     label <- paste("BasicOutputs_",label,sep="")
   }
   
-  .Log(paste("Found results for ",length(cells)," cells\n",sep=""))
+  if (!gridSimulation) .Log(paste("Found results for ",length(cells)," cells\n",sep=""))
   .Log(paste("Found results for ",length(sims)," simulations\n",sep=""))
   
   .Log("Getting basic information about simulations\n")
-  sds.path<-paste("msds:nc?file=",resultsDir,"/",label,sims[1],cells[1],
-                  ".nc",sep="")
+  if (gridSimulation){
+    sds.path<-paste("msds:nc?file=",resultsDir,"/",label,sims[1],
+                    ".nc",sep="")
+  } else {
+    sds.path<-paste("msds:nc?file=",resultsDir,"/",label,sims[1],cells[1],
+                    ".nc",sep="")
+  }
   data<-open.sds(sds.path)
   times<-get.sds(data,"Time step")
   y<-times/12
@@ -114,12 +188,19 @@ PlotTemporal<-function(resultsDir,plotName,outDir=NULL,
   years<-unique(y)
   
   .Log("Initializing plot\n")
-  dims<-.plotDims(length(cells))
+  if (gridSimulation){
+    dims <- .plotDims(length(whichCells))
+  } else {
+    dims<-.plotDims(length(cells))
+  }
+  
   if(!is.null(outDir)){
     pdf(paste(outDir,plotName,".pdf",sep=""),
         width = dims$width,height = dims$height)
   }
-    
+  
+  if (gridSimulation) cells <- as.list(1:length(whichCells))
+  
   par(mfrow=.gridArrange(length(cells)))
   par(mar=c(3,3.5,0.5,8.5))
   par(tck=-0.01)
@@ -140,19 +221,35 @@ PlotTemporal<-function(resultsDir,plotName,outDir=NULL,
     # Loop over simulations in the ensemble
     s<-1
     for (sim in sims){
-      sds.path<-paste("msds:nc?file=",resultsDir,"/",label,sim,cell,
-                      ".nc",sep="")
+      if (gridSimulation){
+        sds.path<-paste("msds:nc?file=",resultsDir,"/",label,sim,".nc",sep="")
+      } else {
+        sds.path<-paste("msds:nc?file=",resultsDir,"/",label,sim,cell,
+                        ".nc",sep="")
+      }
       
       data<-open.sds(sds.path)
       
       # Populate the results matrices
       for (var in vars){
-        allResults[var][[1]][s,]<-get.sds(data,var)
+        if (gridSimulation){
+          allResults[var][[1]][s,]<-get.sds(data,var)[,whichCells[[cell]][1],whichCells[[cell]][2]]
+        } else {
+          allResults[var][[1]][s,]<-get.sds(data,var)
+        }
       }
       s<-s+1
     }
     
     for (var in vars){
+      if (gridSimulation){
+        if (LogVariables[var][[1]]){
+          allResults[[var]] <- exp(allResults[[var]])-1
+        }
+        if (GramsBiomassVariables[var][[1]]){
+          allResults[[var]] <- allResults[[var]]/1000.0
+        }
+      }
       if (PlantBiomassVariables[var][[1]]){
         lp.ratio <- .GetLPRatios(resultsDir)[as.integer(gsub("Cell","",cell))+1]
         allResults[[var]] <- allResults[[var]]/lp.ratio
