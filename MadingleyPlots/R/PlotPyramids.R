@@ -19,6 +19,13 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
     stop("Error, if a grid-based simulation, you must specify cells")
   }
   
+  if (gridSimulation){
+    vars <- gsub(" biomass density","biomass density",vars)
+    names(PlantBiomassVariables) <- lapply(
+      names(PlantBiomassVariables),function(x) return(
+        gsub(" biomass density","biomass density",x)))
+  }
+  
   PlantBiomassVariables<-list(
     "autotroph biomass density" = TRUE,
     "carnivore density" = FALSE,
@@ -62,13 +69,6 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
   }
   
   stopifnot(all(vars %in% names(PlantBiomassVariables)))
-  
-  if (gridSimulation){
-    vars <- gsub(" biomass density","biomass density",vars)
-    names(PlantBiomassVariables) <- lapply(
-      names(PlantBiomassVariables),function(x) return(
-        gsub(" biomass density","biomass density",x)))
-  }
   
   if ("SimulationControlParameters.csv" %in% dir(resultsDir)){
     initialization <- read.csv(paste(resultsDir,"/SimulationControlParameters.csv",sep=""))
