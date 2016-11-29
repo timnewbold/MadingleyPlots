@@ -1,6 +1,8 @@
 
 PlotTemporal<-function(resultsDir,plotName,outDir=NULL,
                        label=NULL,
+                       gridSimulation=FALSE,
+                       whichCells = NULL,
                        vars=c("autotroph biomass density",
                               "herbivore biomass density",
                               "omnivore biomass density",
@@ -12,8 +14,7 @@ PlotTemporal<-function(resultsDir,plotName,outDir=NULL,
                        xlab="Years",ylab=plotName,
                        plotConfidence=TRUE,
                        confidenceInterval=95,
-                       returnResults = FALSE,
-                       whichCells = NULL){
+                       returnResults = FALSE){
   
   stopifnot(length(vars)==length(cols))
   
