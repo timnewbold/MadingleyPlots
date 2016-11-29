@@ -34,6 +34,7 @@ PlotTemporal<-function(resultsDir,plotName,outDir=NULL,
     "herbivore biomass density" = FALSE,
     "omnivore density" = FALSE,
     "omnivore biomass density" = FALSE,
+    "Max Trophic Index" = FALSE,
     "Generalist herbivoreBiomass" = FALSE,
     "Primary herbivoreBiomass" = FALSE,
     "Secondary herbivoreBiomass" = FALSE,
@@ -102,7 +103,8 @@ PlotTemporal<-function(resultsDir,plotName,outDir=NULL,
       "herbivoreabundance density" = TRUE,
       "herbivorebiomass density" = TRUE,
       "omnivoreabundance density" = TRUE,
-      "omnivorebiomass density" = TRUE
+      "omnivorebiomass density" = TRUE,
+      "Max Trophic Index" = FALSE
       
     )
     
@@ -115,8 +117,8 @@ PlotTemporal<-function(resultsDir,plotName,outDir=NULL,
       "herbivoreabundance density" = FALSE,
       "herbivorebiomass density" = TRUE,
       "omnivoreabundance density" = FALSE,
-      "omnivorebiomass density" = TRUE
-      
+      "omnivorebiomass density" = TRUE,
+      "Max Trophic Index" = FALSE
     )
     
     stopifnot(all(vars %in% names(LogVariables)))
