@@ -273,7 +273,7 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
       
     }
     
-    legend(x = 1.1,y = 0.5,
+    legend(x = 0.9,y = 0.5,
            legend = gsub(" biomass density","",vars),
            fill = cols,xpd=TRUE,bty = "n")
     
