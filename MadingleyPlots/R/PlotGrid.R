@@ -139,8 +139,8 @@ PlotGrid <- function(resultsDir,plotName,outDir,
   resultsSimMean[varsToTransform,,]<-exp(resultsSimMean[varsToTransform,,])-1
   
   # Convert any variables stored in grams to kilograms
-  resultsTimesMean[,varsToTransformKG,,]<-resultsTimesMean[,varsToTransformKG,,]/1000
-  resultsSimMean[varsToTransformKG,,]<-resultsSimMean[varsToTransformKG,,]/1000
+  resultsTimesMean[,varsToTransformKG,,]<-resultsTimesMean[,varsToTransformKG,,]/1000.0
+  resultsSimMean[varsToTransformKG,,]<-resultsSimMean[varsToTransformKG,,]/1000.0
   
   # Convert any plant biomass variables to total biomass
   # (not just leaf biomass)

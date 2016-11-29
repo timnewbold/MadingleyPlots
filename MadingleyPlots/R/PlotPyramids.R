@@ -29,6 +29,38 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
     "omnivore biomass density" = FALSE
   )
   
+  if (gridSimulation){
+    
+    LogVariables<-list(
+      "Abundance density" = TRUE,
+      "Biomass density" = TRUE,
+      "autotrophbiomass density" = TRUE,
+      "carnivoreabundance density" = TRUE,
+      "carnivorebiomass density" = TRUE,
+      "herbivoreabundance density" = TRUE,
+      "herbivorebiomass density" = TRUE,
+      "omnivoreabundance density" = TRUE,
+      "omnivorebiomass density" = TRUE
+      
+    )
+    
+    GramsBiomassVariables<-list(
+      "Abundance density" = FALSE,
+      "Biomass density" = TRUE,
+      "autotrophbiomass density" = TRUE,
+      "carnivoreabundance density" = FALSE,
+      "carnivorebiomass density" = TRUE,
+      "herbivoreabundance density" = FALSE,
+      "herbivorebiomass density" = TRUE,
+      "omnivoreabundance density" = FALSE,
+      "omnivorebiomass density" = TRUE
+      
+    )
+    
+    stopifnot(all(vars %in% names(LogVariables)))
+    stopifnot(all(vars %in% names(GramsBiomassVariables)))
+  }
+  
   stopifnot(all(vars %in% names(PlantBiomassVariables)))
   
   if (gridSimulation){
@@ -159,6 +191,14 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
     }
     
     for (var in vars){
+      if (gridSimulation){
+        if (LogVariables[var][[1]]){
+          allResults[[var]] <- exp(allResults[[var]])-1
+        }
+        if (GramsBiomassVariables[var][[1]]){
+          allResults[[var]] <- allResults[[var]]/1000.0
+        }
+      }
       if (PlantBiomassVariables[var][[1]]){
         lp.ratio <- .GetLPRatios(resultsDir)[as.integer(gsub("Cell","",cell))+1]
         allResults[[var]] <- allResults[[var]]/lp.ratio
