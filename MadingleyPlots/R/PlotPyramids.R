@@ -21,9 +21,6 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
   
   if (gridSimulation){
     vars <- gsub(" biomass density","biomass density",vars)
-    names(PlantBiomassVariables) <- lapply(
-      names(PlantBiomassVariables),function(x) return(
-        gsub(" biomass density","biomass density",x)))
   }
   
   PlantBiomassVariables<-list(
@@ -35,6 +32,12 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
     "omnivore density" = FALSE,
     "omnivore biomass density" = FALSE
   )
+  
+  if (gridSimulation){
+    names(PlantBiomassVariables) <- lapply(
+      names(PlantBiomassVariables),function(x) return(
+        gsub(" biomass density","biomass density",x)))
+  }
   
   if (gridSimulation){
     
