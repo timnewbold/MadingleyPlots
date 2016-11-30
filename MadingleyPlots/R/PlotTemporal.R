@@ -34,6 +34,7 @@ PlotTemporal<-function(resultsDir,plotName,outDir=NULL,
     "herbivore biomass density" = FALSE,
     "omnivore density" = FALSE,
     "omnivore biomass density" = FALSE,
+    "Mean Trophic Level" = FALSE,
     "Max Trophic Index" = FALSE,
     "Generalist herbivoreBiomass" = FALSE,
     "Primary herbivoreBiomass" = FALSE,
@@ -104,6 +105,7 @@ PlotTemporal<-function(resultsDir,plotName,outDir=NULL,
       "herbivorebiomass density" = TRUE,
       "omnivoreabundance density" = TRUE,
       "omnivorebiomass density" = TRUE,
+      "Mean Trophic Level" = FALSE,
       "Max Trophic Index" = FALSE
       
     )
@@ -118,6 +120,7 @@ PlotTemporal<-function(resultsDir,plotName,outDir=NULL,
       "herbivorebiomass density" = TRUE,
       "omnivoreabundance density" = FALSE,
       "omnivorebiomass density" = TRUE,
+      "Mean Trophic Level" = FALSE,
       "Max Trophic Index" = FALSE
     )
     
