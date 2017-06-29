@@ -11,7 +11,8 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
                                     "#66a61e",
                                     "#7570b3",
                                     "#d95f02"),
-                        plotFlows=FALSE){
+                        plotFlows=FALSE,mfrow=NULL,add=FALSE,
+                        legend.pos=NULL,legend.labels=NULL,mar=c(1,1,1,8.5)){
   
   stopifnot(length(vars)==length(cols))
   
@@ -118,7 +119,11 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
     stopifnot(length(label)==1)
     label<-label[1]
   } else {
-    label <- paste("BasicOutputs_",label,sep="")
+    if (gridSimulation){
+      label <- paste("GridOutputs_",label,sep="")
+    } else {
+      label <- paste("BasicOutputs_",label,sep="")
+    }
   }
   
   if (!gridSimulation) .Log(paste("Found results for ",length(cells)," cells\n",sep=""))
@@ -134,6 +139,7 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
   }
   
   data<-open.sds(sds.path)
+  
   allTimes<-get.sds(data,"Time step")
   if (is.null(endTimeStep)) endTimeStep <- tail(allTimes,1)
   times <- (endTimeStep-numTimeSteps+1):endTimeStep
@@ -150,11 +156,18 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
         width = dims$width,height = dims$height)
   }
   
-  if (gridSimulation){
-    par(mfrow=.gridArrange(length(whichCells)))
-  } else {
-    par(mfrow=.gridArrange(length(cells)))
+  if(!add){
+    if(is.null(mfrow)){
+      if (gridSimulation){
+        par(mfrow=.gridArrange(length(whichCells)))
+      } else {
+        par(mfrow=.gridArrange(length(cells)))
+      }
+    } else {
+      par(mfrow=mfrow)
+    }
   }
+  
   
   if (gridSimulation) cells <- as.list(1:length(whichCells))
   
@@ -220,12 +233,14 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
     
     yVals <- as.list(as.data.frame(t(temp.df)))
     
+    resultsSimMean[is.na(resultsSimMean)] <- 0
+    
     maxBiomass <- max(unlist(resultsSimMean))
     relWidths <- lapply(resultsSimMean,function(x){
       return(log10(x)/log10(maxBiomass))
     })
     
-    par(mar=c(1,1,1,8.5))
+    par(mar=mar)
     plot.new()
     
     mapply(FUN = function(width,y,col,biomass){
@@ -273,8 +288,11 @@ PlotPyramids <- function(resultsDir,plotName,outDir=NULL,
       
     }
     
-    legend(x = 0.9,y = 0.5,
-           legend = gsub(" biomass density","",vars),
+    if(is.null(legend.pos)) legend.pos <- c(0.9,0.5)
+    if(is.null(legend.labels)) legend.labels <- gsub(" biomass density","",vars)
+    
+    legend(x = legend.pos[1],y = legend.pos[2],
+           legend = legend.labels,
            fill = cols,xpd=TRUE,bty = "n")
     
 #     
